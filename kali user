@@ -1,0 +1,6 @@
+sudo adduser axelxs
+sudo usermod -aG sudo axelxs
+
+root   
+
+sudo su
