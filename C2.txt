@@ -1,0 +1,1 @@
+powershell -Command "Invoke-WebRequest 'https://raw.githubusercontent.com/axelxsx07/ngrok1/main/IMG_6186.jpeg' -OutFile 'C:\Users\Axelx\Downloads\IMG_6186.jpeg'"
