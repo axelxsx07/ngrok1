@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>HACKED BY ENCRYPTO — demo</title>
+<style>
+  :root{
+    --bg:#000;
+    --panel-bg: rgba(0,0,0,0.75);
+    --neon: #00ff7a;
+    --accent:#00ffd1;
+  }
+  html,body{height:100%;margin:0;background:var(--bg);overflow:hidden;font-family: "Courier New", Courier, monospace;}
+  canvas#matrix{position:fixed;inset:0;display:block;z-index:0;}
+  .center {
+    position:fixed;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:2;
+    pointer-events:none;
+  }
+  .plate {
+    pointer-events:auto;
+    min-width:360px;
+    padding: 28px 36px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.85), rgba(0,0,0,0.65));
+    border: 1px solid rgba(0,255,122,0.12);
+    box-shadow:
+      0 8px 40px rgba(0,0,0,0.75),
+      0 0 40px rgba(0,255,122,0.06) inset;
+    border-radius:12px;
+    text-align:center;
+    backdrop-filter: blur(6px) saturate(1.2);
+    transform: translateZ(0);
+  }
+
+  /* Texto principal */
+  .plate h1{
+    margin:0;
+    font-size: clamp(28px, 8vw, 64px);
+    letter-spacing: 0.14em;
+    color: var(--neon);
+    text-shadow:
+      0 0 12px rgba(0,255,122,0.15),
+      0 0 32px rgba(0,255,122,0.08),
+      0 6px 30px rgba(0,0,0,0.6);
+    font-weight:700;
+    text-transform:uppercase;
+    line-height:1;
+    font-family: "Courier New", monospace;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* Glitch pseudo-layers for effect */
+  .plate h1::before,
+  .plate h1::after{
+    content: "HACKED BY ENCRYPTO";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 50%;
+    width:100%;
+    pointer-events:none;
+    mix-blend-mode: screen;
+    opacity:0.12;
+  }
+  .plate h1::before{ color: #00ffd1; transform: translate(-52%,-50%); clip-path: polygon(0 0,100% 0,100% 38%,0 36%); animation: g1 2.9s infinite linear;}
+  .plate h1::after{ color: #00a86b; transform: translate(-48%,-50%); clip-path: polygon(0 64%,100% 66%,100% 100%,0 100%); animation: g2 3.3s infinite linear;}
+
+  @keyframes g1 {
+    0%{ transform: translate(-52%,-50%); }
+    25%{ transform: translate(-45%,-49%); }
+    50%{ transform: translate(-55%,-51%); }
+    75%{ transform: translate(-48%,-50%); }
+    100%{ transform: translate(-52%,-50%); }
+  }
+  @keyframes g2 {
+    0%{ transform: translate(-48%,-50%); }
+    20%{ transform: translate(-42%,-49%); }
+    40%{ transform: translate(-52%,-48%); }
+    60%{ transform: translate(-46%,-51%); }
+    100%{ transform: translate(-48%,-50%); }
+  }
+
+  /* Small caption (hidden visually but accessible) */
+  .visually-hidden { position:absolute; left:-9999px; }
+  /* Responsive */
+  @media (max-width:420px){
+    .plate{ padding:20px; border-radius:10px; min-width:260px; }
+    .plate h1{ font-size: clamp(20px, 10vw, 36px); }
+  }
+</style>
+</head>
+<body>
+<canvas id="matrix" aria-hidden="true"></canvas>
+
+<div class="center" role="main" aria-label="Cartel Hacked by Encrypto">
+  <div class="plate" role="region" aria-label="Cartel principal">
+    <h1>HACKED BY ENCRYPTO</h1>
+  </div>
+</div>
+
+<span class="visually-hidden" aria-hidden="false">HACKED BY ENCRYPTO</span>
+
+<script>
+/* Matrix rain canvas */
+const canvas = document.getElementById('matrix');
+const ctx = canvas.getContext('2d');
+
+function resize() {
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+  initCols();
+}
+addEventListener('resize', resize, {passive:true});
+
+const chars = "01ﾐﾑﾓﾒﾒｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ".split('');
+let fontSize = 16;
+let columns;
+let drops = [];
+
+function initCols(){
+  fontSize = Math.max(12, Math.floor(window.innerWidth / 80));
+  columns = Math.floor(canvas.width / fontSize);
+  drops = new Array(columns).fill(0).map(()=> Math.floor(Math.random()*canvas.height/fontSize));
+  ctx.font = fontSize + "px monospace";
+}
+resize();
+
+function draw(){
+  // slight translucent black to create trailing
+  ctx.fillStyle = "rgba(0,0,0,0.15)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  ctx.fillStyle = "#00ff66";
+  ctx.shadowColor = "rgba(0,255,102,0.12)";
+  ctx.shadowBlur = 8;
+  for (let i=0;i<drops.length;i++){
+    const text = chars[Math.floor(Math.random()*chars.length)];
+    ctx.fillText(text, i*fontSize, drops[i]*fontSize);
+
+    if (drops[i]*fontSize > canvas.height && Math.random() > 0.975){
+      drops[i] = 0;
+    }
+    drops[i]++;
+  }
+  requestAnimationFrame(draw);
+}
+draw();
+</script>
+</body>
+</html>
